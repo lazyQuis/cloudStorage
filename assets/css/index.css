@@ -1,0 +1,49 @@
+.btn-file {
+  position: relative;
+  overflow: hidden;
+  color: #fff;
+}
+.btn-file input[type=file] {
+  position: absolute;
+  top: 0;
+  right: 0;
+  min-width: 100%;
+  min-height: 100%;
+  font-size: 100px;
+  text-align: right;
+  filter: alpha(opacity=0);
+  opacity: 0;
+  outline: none;
+  background: white;
+  cursor: inherit;
+  display: block;
+}
+#modalFile .glyphicon:before, #pathContent td:first-child .glyphicon:before {
+  padding-right: 5px;
+}
+#modalFileDrag {
+  height: 150px;
+  margin-bottom: 10px;
+  border: dashed #ccc 3px;
+  line-height: 120px;
+  font-size: 1.8em;
+  text-align: center;
+  color: #ccc;
+}
+#modalFileSelect {
+  line-height: 25px;
+  overflow:hidden;
+  text-overflow:ellipsis;
+}
+#pathContent table td:first-child{
+  word-wrap: break-word;
+  white-space: normal;
+  word-break: break-all;
+}
+#pathContent table td:nth-child(3){
+  white-space: normal;
+}
+#fileNameInfo {
+  height: 4.5em;
+  margin-top: 10px;
+}

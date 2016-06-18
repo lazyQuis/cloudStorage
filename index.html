@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Cloud Storage</title>
+  <!-- Bootstrap -->
+  <link href="assets/css/bootstrap.min.css" rel="stylesheet">
+  <link href="assets/css/bootstrap-theme.min.css" rel="stylesheet">
+  <link href="assets/css/index.css" rel="stylesheet">
+  <!--[if lt IE 9]>
+    <script src="https://oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js"></script>
+    <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
+  <![endif]-->
+</head>
+<body>
+  <div class="container">
+    <!-- nav bar -->
+    <nav class="navbar navbar-default">
+      <div class="container-fluid">
+        <div class="navbar-header">
+          <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1" aria-expanded="false">
+            <span class="sr-only">Toggle navigation</span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+          </button>
+          <span class="navbar-brand">Cloud Storage</span>
+        </div>
+        <!-- Collect the nav links, forms, and other content for toggling -->
+        <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+          <ul class="nav navbar-right">
+            <button type="button" class="btn btn-success navbar-btn btn_refresh"><span class="glyphicon glyphicon-refresh" aria-hidden="true"></span> Refresh</button>
+            <button type="button" class="btn btn-primary navbar-btn btn_filePanel"><span class="glyphicon glyphicon-plus" aria-hidden="true"></span> Upload</button>
+            <button type="button" class="btn btn-primary navbar-btn btn_dirPanel"><span class="glyphicon glyphicon-folder-close" aria-hidden="true"></span> Folder</button>
+          </ul>
+        </div>
+      </div>
+    </nav>
+    <!-- breadcrumb -->
+    <ol class="breadcrumb" id="pathList">
+      <li class="active">Home</li>
+    </ol>
+    
+    <!-- panel -->
+    <div class="panel panel-default">
+      <div class="panel-heading" id="pathInfo"><span>-</span></div>
+      <div class="panel-body">
+        <div class="input-group">
+          <span class="input-group-addon"><span class="glyphicon glyphicon-search" aria-hidden="true"></span> </span>
+          <input id="itemSearch" type="text" class="form-control" placeholder="輸入檔名">
+        </div>
+      </div>
+
+      <div class="table-responsive" id="pathContent" style="display: none;">
+        <table class="table table-striped">
+          <thead>
+            <tr>
+              <th class="col-md-5 col-xs-4">Type / Name</th>
+              <th class="col-md-2 col-xs-2">Size</th>
+              <th class="col-md-2 col-xs-3">Date</th>
+              <th class="col-md-2 col-xs-2">Act</th>
+              <th class="col-md-1 col-xs-1"><input id="checkAll" type="checkbox"></th>
+            </tr>
+          </thead>
+          <tbody>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="panel-footer text-right">
+        <button type="button" class="btn btn-info btn_download_all" aria-label="Left Align">
+          Download
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- modal start-->
+  <!-- modal download -->
+  <div class="modal fade" id="modalDownload" tabindex="-1" role="dialog">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+          <h4 class="modal-title">下載資訊</h4>
+        </div>
+        <div class="modal-body">-</div>
+      </div>
+    </div>
+  </div>
+  <!-- modal folder new -->
+  <div class="modal fade" id="modalFolder" tabindex="-1" role="dialog">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h4 class="modal-title">創建資料夾</h4>
+        </div>
+        <div class="modal-body">
+          <form>
+            <div class="form-group">
+              <label for="recipient-name" class="control-label">Folder :</label>
+              <input type="text" class="form-control" id="folderNameNew" placeholder="folder name">
+            </div>
+          </form>
+          <p id="folderNameInfo">-</p>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-default" data-dismiss="modal">關閉</button>
+          <button type="button" id="btn_dirNew" class="btn btn-primary" data-loading-text="等待">新增</button>
+        </div>
+      </div>
+    </div>
+  </div>
+  <!-- modal file new -->
+  <div class="modal fade" id="modalFile" tabindex="-1" role="dialog">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h4 class="modal-title">上傳檔案</h4>
+        </div>
+        <div class="modal-body">
+          <div id="modalFileDrag"><strong>拖入要上傳的檔案</strong></div>
+          <div class="input-group">
+            <div class="form-control form-inline" id="modalFileSelect"></div>
+            <div class="input-group-btn">
+              <button type="button" class="btn btn-default" id="modalFileRemove" style="display: none;"><span class="glyphicon glyphicon glyphicon-trash" aria-hidden="true">Remove</button>
+              <span class="btn btn-primary btn-file"><span class="glyphicon glyphicon-folder-open" aria-hidden="true">Browse<input type="file" id="modalFileUpload"></span>
+            </div>
+          </div>
+          <p id="fileNameInfo" class="pre-scrollable">-</p>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-default" data-dismiss="modal">關閉</button>
+          <button type="button" id="btn_fileNew" class="btn btn-primary" data-loading-text="等待" disabled="true">上傳</button>
+        </div>
+      </div>
+    </div>
+  </div>
+  <!-- modal error -->
+  <div class="modal fade" id="modalError" tabindex="-1" role="dialog">
+    <div class="modal-dialog modal-sm">
+      <div class="modal-content">
+        <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+          <h4 class="modal-title">警告</h4>
+        </div>
+        <div class="modal-body">-</div>
+      </div>
+    </div>
+  </div>
+<!--script-->
+<script type="text/javascript" src="assets/js/main.js"></script>
+<script type="text/javascript" src="assets/js/vendor/jquery-1.10.1.min.js"></script>
+<script type="text/javascript" src="assets/js/vendor/es5-shim.min.js"></script>
+<script type="text/javascript" src="assets/js/vendor/jszip.min.js"></script>
+<script type="text/javascript" src="assets/js/vendor/encoding-indexes.js"></script>
+<script type="text/javascript" src="assets/js/vendor/encoding.js"></script>
+<script type="text/javascript" src="assets/js/vendor/bootstrap.min.js"></script>
+<script type="text/javascript" src="assets/js/vendor/hmac-sha256.js"></script>
+<script type="text/javascript" src="assets/js/vendor/enc-base64-min.js"></script>
+<script type="text/javascript" src="assets/js/storage-azure-config.js"></script>
+<script type="text/javascript" src="assets/js/storage-azure.js"></script>
+<script type="text/javascript" src="assets/js/storageInterface.js"></script>
+<script type="text/javascript" src="assets/js/index.js"></script>
+</body>
+</html>
